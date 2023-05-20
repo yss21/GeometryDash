@@ -7,10 +7,6 @@ public class SceneManager : MonoBehaviour
 {
     private static SceneManager instance = null;
 
-    private BGMPlayer bgmPlayer = null;
-    private int stageNumber = 0;
-
-
     // 프로퍼티
     public static SceneManager Instance
     {
@@ -24,27 +20,15 @@ public class SceneManager : MonoBehaviour
             return instance;
         }
     }
-    public BGMPlayer BgmPlayer
-    { 
-        get
-        {
-            if(bgmPlayer == null)
-            {
-                bgmPlayer = FindObjectOfType<BGMPlayer>();
-            }
-            return bgmPlayer;
-        }
-    }
 
     public void LoadScene(string sceneName)
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
-        BgmPlayer.BGMSound(sceneName);
     }
 
     private void SetCurrentStageNumber(int stageNum)
     {
-        stageNumber = stageNum;
+        PlayerData.Instance.stageNumber = stageNum;
     }
 
     public void StartStage(int stageNum)
@@ -53,10 +37,16 @@ public class SceneManager : MonoBehaviour
         LoadScene("Stage" + stageNum.ToString());
     }
 
+    public void RetryStage()
+    {
+        SetCurrentStageNumber(PlayerData.Instance.stageNumber);
+        LoadScene("Stage" + PlayerData.Instance.stageNumber.ToString());
+    }
+
     public void NextStage()
     {
-        SetCurrentStageNumber(stageNumber + 1);
-        LoadScene("Stage" + stageNumber.ToString());
+        SetCurrentStageNumber(PlayerData.Instance.stageNumber + 1);
+        LoadScene("Stage" + PlayerData.Instance.stageNumber.ToString());
     }
 
     public void EndStage()

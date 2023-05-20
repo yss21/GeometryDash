@@ -22,7 +22,9 @@ public class SpawnBehaviour : MonoBehaviour
     
     private IEnumerator InstantiateCharacter()
     {
+        Sprite sprite = PlayerData.Instance.GetMyCharacterSprite();
         playerObj = Instantiate(player, defaultSpawnPos, defaultRotation);
+        playerObj.GetComponent<SpriteRenderer>().sprite = sprite;
         var cameracon = Camera.main.gameObject.GetComponent<Cameracon>();
         cameracon.playerTransform = playerObj.transform;
         Rigidbody2D rigid = player.GetComponent<Rigidbody2D>();
@@ -35,7 +37,7 @@ public class SpawnBehaviour : MonoBehaviour
     }
     public void RespawnPlayer()
     {
-        playerObj.transform.position = defaultSpawnPos;
+        playerObj.transform.SetPositionAndRotation(defaultSpawnPos, defaultRotation);
         Rigidbody2D rigid = playerObj.GetComponent<Rigidbody2D>();
         rigid.velocity = Vector2.zero;
     }

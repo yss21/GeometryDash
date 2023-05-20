@@ -8,6 +8,7 @@ using UnityEngine;
 public class StageManager : MonoBehaviour
 {
     [SerializeField] private SpawnBehaviour spawner;
+    private MapObject currentMap;
 
     private static StageManager instance = null;
 
@@ -25,10 +26,14 @@ public class StageManager : MonoBehaviour
         }
     }
 
+    // ¹º°¡¸¦ ¾À 
+
     private void Awake()
     {
         GenerateObject();
         GenerateMap();
+
+        currentMap = FindObjectOfType<MapObject>();
     }
 
     public void GenerateObject()
@@ -43,9 +48,22 @@ public class StageManager : MonoBehaviour
     {
         spawner.RespawnPlayer();
     }
+
+    public void OnDieStage(Vector3 characterPos)
+    {
+        float distanceOfStage = currentMap.distanceOfStage;
+        float characterPosX = characterPos.x;
+
+        float percent = distanceOfStage / characterPosX * 100.0f;
+        PlayerPrefs.SetFloat($"stageClearPercent{PlayerData.Instance.stageNumber}", percent);
+    }
+
     void Update()
     {
-        if(Input.GetButtonDown("Cancel"))
-            SceneManager.Instance.LoadScene("Wait");
+        if (Input.GetButtonDown("Cancel"))
+        {
+            // ¼÷Á¦ ÆË¾÷ ¸¸µé±â
+            Time.timeScale = Time.timeScale <= 0.1f ? 1.0f : 0.0f;
+        }
     }
 }

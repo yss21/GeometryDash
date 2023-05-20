@@ -10,7 +10,7 @@ public class Wait : MonoBehaviour
     }
     public void Retry()
     {
-        //SceneManager.Instance.LoadScene("Stage");
+        SceneManager.Instance.RetryStage();
     }
     public void Select()
     {
