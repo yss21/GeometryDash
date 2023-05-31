@@ -22,6 +22,11 @@ public class PlayerData : ScriptableObject
     public int characterNumber = 0;
     public int stageNumber = 0;
 
+    public bool[] characterLock = new bool[6]
+    {
+        true, true, true, false, false, false
+    };
+
     public Sprite GetMyCharacterSprite()
     {
         return characterSprites[characterNumber];

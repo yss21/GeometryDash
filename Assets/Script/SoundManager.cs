@@ -10,6 +10,10 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioSource sfxsource;
     [SerializeField] private AudioClip bgmclip;
     [SerializeField] private AudioClip sfxclip;
+
+    private const string BGMPlayerPrefKey = "BGM";
+    private const string SFXPlayerPrefKey = "SFX";
+
     private static SoundManager instance = null;
     public static SoundManager Instance
     {
@@ -26,10 +30,16 @@ public class SoundManager : MonoBehaviour
     public void SetVolumeBgm(float value)
     {
         bgmsource.volume = value;
-
+        PlayerPrefs.SetFloat(BGMPlayerPrefKey, value);
     }
     public void SetVolumeSfx(float value)
     {
-        sfxsource.volume = value;
+        sfxsource.volume = value; 
+        PlayerPrefs.SetFloat(SFXPlayerPrefKey, value);
+    }
+    private void Awake()
+    {
+        //최초의 볼륨을 몇으로 할지 정하기 위해서
+        bgmsource.volume = PlayerPrefs.GetFloat(BGMPlayerPrefKey);
     }
 }

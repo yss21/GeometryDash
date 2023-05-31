@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // 역할
 // 1. 맵, 캐릭터 등을 생성
@@ -11,6 +12,8 @@ public class StageManager : MonoBehaviour
     private MapObject currentMap;
 
     private static StageManager instance = null;
+
+    [SerializeField] private GameObject waitPopup;
 
     // 프로퍼티
     public static StageManager Instance
@@ -54,8 +57,14 @@ public class StageManager : MonoBehaviour
         float distanceOfStage = currentMap.distanceOfStage;
         float characterPosX = characterPos.x;
 
-        float percent = distanceOfStage / characterPosX * 100.0f;
+        float percent = characterPosX / distanceOfStage * 100.0f;
         PlayerPrefs.SetFloat($"stageClearPercent{PlayerData.Instance.stageNumber}", percent);
+    }
+
+    public void OffWait()
+    {
+        Time.timeScale = 1.0f;
+        waitPopup.SetActive(false);
     }
 
     void Update()
@@ -63,7 +72,8 @@ public class StageManager : MonoBehaviour
         if (Input.GetButtonDown("Cancel"))
         {
             // 숙제 팝업 만들기
-            Time.timeScale = Time.timeScale <= 0.1f ? 1.0f : 0.0f;
+            Time.timeScale = 0.0f;
+            waitPopup.SetActive(true);
         }
     }
 }

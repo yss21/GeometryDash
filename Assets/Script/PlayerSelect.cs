@@ -20,6 +20,9 @@ public class PlayerSelect : MonoBehaviour
 
     public void OnClick(int value)
     {
+        if (PlayerData.Instance.characterLock[value] == false)
+            return;
+
         if (PlayerData.Instance.characterNumber == value)
             return;
 

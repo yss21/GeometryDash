@@ -60,6 +60,7 @@ public class Player : MonoBehaviour
             isJumping = false;
         if (collision.gameObject.tag == "Enemy")
         {
+            StageManager.Instance.OnDieStage(transform.position);
             StageManager.Instance.GenerateRespawnPlayer();
             PlaySound("DAMAGED");
         }
@@ -68,9 +69,19 @@ public class Player : MonoBehaviour
     {
         if (collision.CompareTag("Finish"))
         {
+            if(PlayerData.Instance.stageNumber == 2)
+            {
+                PlayerData.Instance.characterLock[4] = true;
+            }
+            StageManager.Instance.OnDieStage(transform.position);
             // 스테이지 종료를 스테이지 매니저에게 전달
             PlaySound("END");
             SceneManager.Instance.EndStage();
+        }
+        if (collision.CompareTag("Item"))
+        {
+            PlayerData.Instance.characterLock[3] = true;
+            collision.gameObject.SetActive(false);
         }
     }
     void PlaySound(string action)
@@ -90,4 +101,5 @@ public class Player : MonoBehaviour
 
         audioSource.PlayOneShot(audioSource.clip);
     }
+
 }
