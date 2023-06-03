@@ -7,6 +7,7 @@ public class PlayerSelect : MonoBehaviour
 {
     [SerializeField] private Image[] image = new Image[6];
     [SerializeField] private Image[] selectImage = new Image[6];
+    [SerializeField] private Text alertText = null;
 
     void Start()
     {
@@ -18,10 +19,20 @@ public class PlayerSelect : MonoBehaviour
         Select();
     }
 
+    private void TurnOffAlert()
+    {
+        alertText.gameObject.SetActive(false);
+    }
+
     public void OnClick(int value)
     {
         if (PlayerData.Instance.characterLock[value] == false)
+        {
+            alertText.text = $"{value + 1} 번째 캐릭터의 해금이 필요합니다.";
+            alertText.gameObject.SetActive(true);
+            Invoke("TurnOffAlert", 2f);
             return;
+        }
 
         if (PlayerData.Instance.characterNumber == value)
             return;
@@ -51,7 +62,7 @@ public class PlayerSelect : MonoBehaviour
         // 모든 이미지를 마젠타 색으로 바꾼다.
         for(int i = 0;i < 6; i++)
         {
-            selectImage[i].color = Color.magenta;
+            selectImage[i].color = Color.white;
         }
     }
 }

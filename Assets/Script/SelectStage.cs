@@ -21,15 +21,9 @@ public class SelectStage : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Horizontal"))
-        {
-            if (Input.GetAxis("Horizontal") > 0)
-                SceneManager.Instance.LoadScene("SelectStage2");
-            else if (Input.GetAxis("Horizontal") < 0)
-                SceneManager.Instance.LoadScene("SelectStage3");
-        }
-
         if (Input.GetButtonDown("Cancel"))
+        {
             SceneManager.Instance.LoadScene("Start");
+        }
     }
 }

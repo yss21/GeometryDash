@@ -61,6 +61,11 @@ public class StageManager : MonoBehaviour
         PlayerPrefs.SetFloat($"stageClearPercent{PlayerData.Instance.stageNumber}", percent);
     }
 
+    public void OnClearStage()
+    {
+        PlayerPrefs.SetFloat($"stageClearPercent{PlayerData.Instance.stageNumber}", 100f);
+    }
+
     public void OffWait()
     {
         Time.timeScale = 1.0f;
@@ -69,11 +74,20 @@ public class StageManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Cancel"))
+        if (IsCancelButtonDown())
         {
             // ¼÷Á¦ ÆË¾÷ ¸¸µé±â
             Time.timeScale = 0.0f;
             waitPopup.SetActive(true);
         }
+    }
+
+    private bool IsCancelButtonDown()
+    {
+#if UNITY_ANDROID
+        return Input.touchCount > 2;
+#elif UNITY_STANDALONE_WIN
+        return Input.GetButtonDown("Cancel");
+#endif
     }
 }

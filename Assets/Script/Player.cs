@@ -24,20 +24,31 @@ public class Player : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody2D>();
     }
+
     void Update()
     {
         rigid.velocity = new Vector2(speed, rigid.velocity.y);
 
         if (isJumping)
-            transform.Rotate(Vector3.back * rotationSpeed * Time.deltaTime);
+            rigid.rotation -= rotationSpeed * Time.deltaTime;
 
-        if (Input.GetButtonDown("Jump") && !isJumping && !IsRotate())
+        if (IsButtonDown() && !isJumping && !IsRotate())
         {
             rigid.velocity = new Vector2(rigid.velocity.x, jump);
             isJumping = true;
             PlaySound("JUMP");
         }
     }
+
+    private bool IsButtonDown()
+    {
+#if UNITY_ANDROID
+        return Input.touchCount > 0;
+#elif UNITY_STANDALONE_WIN
+        return Input.GetButtonDown("Jump");
+#endif
+    }
+
     private bool IsRotate()
     {
         float z = GetAnglesZ();
@@ -73,7 +84,8 @@ public class Player : MonoBehaviour
             {
                 PlayerData.Instance.characterLock[4] = true;
             }
-            StageManager.Instance.OnDieStage(transform.position);
+
+            StageManager.Instance.OnClearStage();
             // 스테이지 종료를 스테이지 매니저에게 전달
             PlaySound("END");
             SceneManager.Instance.EndStage();
