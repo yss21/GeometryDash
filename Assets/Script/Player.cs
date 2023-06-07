@@ -5,18 +5,20 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float speed = 5f;
-    public float jump = 5f;
-    public float rotationSpeed = 50f;
+    public float speed = 4f;
+    public float jump = 10f;
+    public float rotationSpeed = 180f;
 
-    private Quaternion previousRotation;
+    public bool isJumping = false;
+    public bool isRotating = false;
+    public bool isMouseDown = false;
 
-    private bool isJumping = false;
     private Rigidbody2D rigid;
 
     [SerializeField] private AudioClip audioJump;
     [SerializeField] private AudioClip audioDamaged;
     [SerializeField] private AudioClip audioFinish;
+    [SerializeField] private AudioClip audioItem;
 
     [SerializeField] private AudioSource audioSource; // 플레이어는 본인이 가져야 하는 이유가 있음
 
@@ -32,7 +34,10 @@ public class Player : MonoBehaviour
         if (isJumping)
             rigid.rotation -= rotationSpeed * Time.deltaTime;
 
-        if (IsButtonDown() && !isJumping && !IsRotate())
+        isMouseDown = IsButtonDown();
+        isRotating = IsRotate();
+
+        if (isMouseDown && !isJumping && !isRotating)
         {
             rigid.velocity = new Vector2(rigid.velocity.x, jump);
             isJumping = true;
@@ -52,7 +57,7 @@ public class Player : MonoBehaviour
     private bool IsRotate()
     {
         float z = GetAnglesZ();
-        if((z < 5 && z > -5) || (z < 95 && z > 85) || (z < 185 && z > 175) || (z < 275 && z > 265))
+        if((z < 7 && z > -7) || (z < 97 && z > 83) || (z < 187 && z > 173) || (z < 277 && z > 263) || (z < 367 && z > 353))
         {
             return false;
         }
@@ -61,10 +66,12 @@ public class Player : MonoBehaviour
             return true;
         }
     }
+
     private float GetAnglesZ()
     {
         return transform.localEulerAngles.z;
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Ground")
@@ -73,6 +80,7 @@ public class Player : MonoBehaviour
         {
             StageManager.Instance.OnDieStage(transform.position);
             StageManager.Instance.GenerateRespawnPlayer();
+            StageManager.Instance.RespawnItems();
             PlaySound("DAMAGED");
         }
     }
@@ -82,7 +90,7 @@ public class Player : MonoBehaviour
         {
             if(PlayerData.Instance.stageNumber == 2)
             {
-                PlayerData.Instance.characterLock[4] = true;
+                PlayerData.Instance.UnlockCharacter(4);
             }
 
             StageManager.Instance.OnClearStage();
@@ -90,12 +98,45 @@ public class Player : MonoBehaviour
             PlaySound("END");
             SceneManager.Instance.EndStage();
         }
+
         if (collision.CompareTag("Item"))
         {
-            PlayerData.Instance.characterLock[3] = true;
-            collision.gameObject.SetActive(false);
+            var itemObject = collision.GetComponent<ItemObject>();
+            if (itemObject == null)
+                return;
+
+            if (itemObject is JumpUpObject)
+            {
+                // 점프력 업
+                jump = 15f;
+                Invoke("JumpDown", 2f);
+            }
+            else if (itemObject is SpeedUpObject)
+            {
+                // 스피드 업
+                speed = 8f;
+                Invoke("SpeedDown", 2f);
+            }
+            else if (itemObject is UnlockObject)
+            {
+                PlayerData.Instance.UnlockCharacter(3);
+            }
+
+            itemObject.gameObject.SetActive(false);
+            PlaySound("Item");
         }
     }
+
+    void JumpDown()
+    {
+        jump = 10f;
+    }
+
+    void SpeedDown()
+    {
+        speed = 4f;
+    }
+
     void PlaySound(string action)
     {
         switch (action)
@@ -108,6 +149,9 @@ public class Player : MonoBehaviour
                 break;
             case "FINISH":
                 audioSource.clip = audioFinish;
+                break;
+            case "Item":
+                audioSource.clip = audioItem;
                 break;
         }
 

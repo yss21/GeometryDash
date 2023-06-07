@@ -52,13 +52,26 @@ public class StageManager : MonoBehaviour
         spawner.RespawnPlayer();
     }
 
+    public void RespawnItems()
+    {
+        spawner.RespawnItems();
+    }
+
     public void OnDieStage(Vector3 characterPos)
     {
         float distanceOfStage = currentMap.distanceOfStage;
         float characterPosX = characterPos.x;
 
-        float percent = characterPosX / distanceOfStage * 100.0f;
-        PlayerPrefs.SetFloat($"stageClearPercent{PlayerData.Instance.stageNumber}", percent);
+        float currentPercent = characterPosX / distanceOfStage * 100.0f;
+
+        // 이전 기록을 가지고 와서, 
+        float prevPercent = PlayerPrefs.GetFloat($"stageClearPercent{PlayerData.Instance.stageNumber}");
+
+        // 현재 값이랑 비교해서
+        if (prevPercent < currentPercent)
+        {
+            PlayerPrefs.SetFloat($"stageClearPercent{PlayerData.Instance.stageNumber}", currentPercent);
+        }
     }
 
     public void OnClearStage()

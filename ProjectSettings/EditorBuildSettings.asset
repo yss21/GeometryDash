@@ -17,13 +17,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SelectStage.unity
     guid: 39575865149a0d74fb328b930fcd9647
-  - enabled: 1
-    path: Assets/Scenes/Wait.unity
-    guid: f96f4bbca79281e41af346122fc759c7
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/Stage2.unity
     guid: 1589a3560f9aff54f91ea4ff28c64c46
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SelectStage2.unity
     guid: 68538af458469db43ade87b59854e823
   - enabled: 1

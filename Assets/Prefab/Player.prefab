@@ -104,10 +104,10 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 2.5
   m_GravityScale: 2
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: a798d0db66b039045beb8c0d3b5f8074, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &2409647786425407887
 MonoBehaviour:
@@ -127,6 +127,7 @@ MonoBehaviour:
   audioJump: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
   audioDamaged: {fileID: 8300000, guid: 7e9ee6dc04a5d40d1a5dfc4beb9865e7, type: 3}
   audioFinish: {fileID: 8300000, guid: 7478151cf36724a7dada558f746c3633, type: 3}
+  audioItem: {fileID: 8300000, guid: 881e3f52c86c94f26a60718d35627cd8, type: 3}
   audioSource: {fileID: 7519592972538965955}
 --- !u!61 &8352467003065581146
 BoxCollider2D:

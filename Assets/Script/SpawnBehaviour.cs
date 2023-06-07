@@ -31,10 +31,22 @@ public class SpawnBehaviour : MonoBehaviour
         rigid.velocity = Vector2.zero;
         yield return null;
     }
+
     public void MakeMap()
     {
         Instantiate(map, defaultSpawnPos, defaultRotation);
     }
+    
+    public void RespawnItems()
+    {
+        var itemObjs = FindObjectsOfType<ItemObject>(true);
+        for(int i = 0; i < itemObjs.Length; i++)
+        {
+            var item = itemObjs[i];
+            item.gameObject.SetActive(true);
+        }
+    }
+
     public void RespawnPlayer()
     {
         playerObj.transform.SetPositionAndRotation(defaultSpawnPos, defaultRotation);
