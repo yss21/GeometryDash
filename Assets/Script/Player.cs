@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
+        audioSource.volume = SoundManager.Instance.GetSFXVolume();
     }
 
     public void Reset()
