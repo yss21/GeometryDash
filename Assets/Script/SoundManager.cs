@@ -31,6 +31,7 @@ public class SoundManager : MonoBehaviour
     {
         //최초의 볼륨을 몇으로 할지 정하기 위해서
         bgmsource.volume = PlayerPrefs.GetFloat(BGMPlayerPrefKey);
+        sfxVolumeValue = PlayerPrefs.GetFloat(SFXPlayerPrefKey);
 
         instance = FindObjectOfType<SoundManager>();
         DontDestroyOnLoad(instance.gameObject);
