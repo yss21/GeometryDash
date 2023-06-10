@@ -22,12 +22,22 @@ public class SoundManager : MonoBehaviour
             if (instance == null)
             {
                 instance = FindObjectOfType<SoundManager>();
-                // 얘가 VolumeSetting에서 불려서 생긴 문제
                 DontDestroyOnLoad(instance.gameObject);
             }
+
             return instance;
         }
     }
+
+    private void Awake()
+    {
+        //최초의 볼륨을 몇으로 할지 정하기 위해서
+        bgmsource.volume = PlayerPrefs.GetFloat(BGMPlayerPrefKey);
+
+        instance = FindObjectOfType<SoundManager>();
+        DontDestroyOnLoad(instance.gameObject);
+    }
+
     public void SetVolumeBgm(float value)
     {
         bgmsource.volume = value;
@@ -38,9 +48,5 @@ public class SoundManager : MonoBehaviour
         sfxsource.volume = value; 
         PlayerPrefs.SetFloat(SFXPlayerPrefKey, value);
     }
-    private void Awake()
-    {
-        //최초의 볼륨을 몇으로 할지 정하기 위해서
-        bgmsource.volume = PlayerPrefs.GetFloat(BGMPlayerPrefKey);
-    }
+
 }
