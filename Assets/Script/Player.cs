@@ -27,6 +27,18 @@ public class Player : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
     }
 
+    public void Reset()
+    {
+        speed = 4f;
+        jump = 10f;
+        rotationSpeed = 180f;
+        isJumping = false;
+        isRotating = false;
+        isMouseDown = false;
+        rigid.velocity = Vector2.zero;
+        rigid.SetRotation(0);
+    }
+
     void Update()
     {
         rigid.velocity = new Vector2(speed, rigid.velocity.y);

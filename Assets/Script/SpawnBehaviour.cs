@@ -50,7 +50,7 @@ public class SpawnBehaviour : MonoBehaviour
     public void RespawnPlayer()
     {
         playerObj.transform.SetPositionAndRotation(defaultSpawnPos, defaultRotation);
-        Rigidbody2D rigid = playerObj.GetComponent<Rigidbody2D>();
-        rigid.velocity = Vector2.zero;
+        var player = playerObj.GetComponent<Player>();
+        player.Reset();
     }
 }
