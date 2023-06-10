@@ -22,6 +22,7 @@ public class SoundManager : MonoBehaviour
             if (instance == null)
             {
                 instance = FindObjectOfType<SoundManager>();
+                // 얘가 VolumeSetting에서 불려서 생긴 문제
                 DontDestroyOnLoad(instance.gameObject);
             }
             return instance;

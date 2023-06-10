@@ -92,6 +92,10 @@ public class Player : MonoBehaviour
             {
                 PlayerData.Instance.UnlockCharacter(4);
             }
+            if(PlayerData.Instance.stageNumber == 3)
+            {
+                PlayerData.Instance.UnlockCharacter(5);
+            }
 
             StageManager.Instance.OnClearStage();
             // 스테이지 종료를 스테이지 매니저에게 전달
