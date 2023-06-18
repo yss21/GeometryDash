@@ -12,7 +12,7 @@ public class StageManager : MonoBehaviour
     private MapObject currentMap;
 
     private static StageManager instance = null;
-
+    [SerializeField] private Text dieText = null;
     [SerializeField] private GameObject waitPopup;
 
     // 프로퍼티
@@ -79,6 +79,19 @@ public class StageManager : MonoBehaviour
         PlayerPrefs.SetFloat($"stageClearPercent{PlayerData.Instance.stageNumber}", 100f);
     }
 
+    private void TurnOff()
+    {
+        dieText.gameObject.SetActive(false);
+    }
+
+    public void DieText()
+    {
+        dieText.text = "플레이어가 죽었습니다.";
+        dieText.color = Color.red;
+        dieText.gameObject.SetActive(true);
+        Invoke("TurnOff", 2f);
+    }
+
     public void OffWait()
     {
         Time.timeScale = 1.0f;
@@ -89,7 +102,7 @@ public class StageManager : MonoBehaviour
     {
         if (IsCancelButtonDown())
         {
-            // 숙제 팝업 만들기
+            // 팝업 만들기
             Time.timeScale = 0.0f;
             waitPopup.SetActive(true);
         }

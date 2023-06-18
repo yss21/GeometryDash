@@ -9,12 +9,17 @@ public class Player : MonoBehaviour
     public float jump = 10f;
     public float rotationSpeed = 180f;
 
+    public bool isDash = false;
     public bool isJumping = false;
     public bool isRotating = false;
     public bool isMouseDown = false;
+    public bool isMouseDown2 = false;
+
+    public bool isSpeedUp = false;
 
     private Rigidbody2D rigid;
 
+    [SerializeField] private AudioClip audioDash;
     [SerializeField] private AudioClip audioJump;
     [SerializeField] private AudioClip audioDamaged;
     [SerializeField] private AudioClip audioFinish;
@@ -33,9 +38,11 @@ public class Player : MonoBehaviour
         speed = 4f;
         jump = 10f;
         rotationSpeed = 180f;
+        isDash = false;
         isJumping = false;
         isRotating = false;
         isMouseDown = false;
+        isMouseDown2 = false;
         rigid.velocity = Vector2.zero;
         rigid.SetRotation(0);
     }
@@ -44,11 +51,26 @@ public class Player : MonoBehaviour
     {
         rigid.velocity = new Vector2(speed, rigid.velocity.y);
 
+        if (isDash && !isSpeedUp)
+        {
+            speed = 6f;
+            isSpeedUp = true; //
+            isDash = false;
+            Invoke("SpeedDown", 1f);
+        }
+
         if (isJumping)
             rigid.rotation -= rotationSpeed * Time.deltaTime;
 
-        isMouseDown = IsButtonDown();
+        isMouseDown2 = IsDashButtonDown();
+        isMouseDown = IsJumpButtonDown();
         isRotating = IsRotate();
+
+        if (isMouseDown2 && !isDash)
+        {
+            isDash = true;
+            PlaySound("DASH");
+        }
 
         if (isMouseDown && !isJumping && !isRotating)
         {
@@ -58,7 +80,16 @@ public class Player : MonoBehaviour
         }
     }
 
-    private bool IsButtonDown()
+    private bool IsDashButtonDown()
+    {
+#if UNITY_ANDROID
+        return Input.touchCount > 1;
+#elif UNITY_STANDALONE_WIN
+        return Input.GetButtonDown("Dash");
+#endif
+    }
+
+    private bool IsJumpButtonDown()
     {
 #if UNITY_ANDROID
         return Input.touchCount > 0;
@@ -91,6 +122,7 @@ public class Player : MonoBehaviour
             isJumping = false;
         if (collision.gameObject.tag == "Enemy")
         {
+            StageManager.Instance.DieText();
             StageManager.Instance.OnDieStage(transform.position);
             StageManager.Instance.GenerateRespawnPlayer();
             StageManager.Instance.RespawnItems();
@@ -132,6 +164,7 @@ public class Player : MonoBehaviour
             {
                 // 스피드 업
                 speed = 8f;
+                isSpeedUp = true;
                 Invoke("SpeedDown", 2f);
             }
             else if (itemObject is UnlockObject)
@@ -152,12 +185,16 @@ public class Player : MonoBehaviour
     void SpeedDown()
     {
         speed = 4f;
+        isSpeedUp = false;
     }
 
     void PlaySound(string action)
     {
         switch (action)
         {
+            case "DASH":
+                audioSource.clip = audioDash;
+                break;
             case "JUMP":
                 audioSource.clip = audioJump;
                 break;

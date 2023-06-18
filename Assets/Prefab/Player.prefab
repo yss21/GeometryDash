@@ -124,6 +124,12 @@ MonoBehaviour:
   speed: 4
   jump: 10
   rotationSpeed: 180
+  isJumping: 0
+  isRotating: 0
+  isMouseDown: 0
+  isDash: 0
+  isMouseDown2: 0
+  audioDash: {fileID: 8300000, guid: 32d4b1811dda14a6cb9e059ee8ad17d2, type: 3}
   audioJump: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
   audioDamaged: {fileID: 8300000, guid: 7e9ee6dc04a5d40d1a5dfc4beb9865e7, type: 3}
   audioFinish: {fileID: 8300000, guid: 7478151cf36724a7dada558f746c3633, type: 3}

@@ -21,9 +21,18 @@ public class SelectStage : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Cancel"))
+        if (IsCancelButtonDown())
         {
             SceneManager.Instance.LoadScene("Start");
         }
+    }
+
+    private bool IsCancelButtonDown()
+    {
+#if UNITY_ANDROID
+        return Input.touchCount > 2;
+#elif UNITY_STANDALONE_WIN
+        return Input.GetButtonDown("Cancel");
+#endif
     }
 }
