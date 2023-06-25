@@ -5,8 +5,15 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float speed = 4f;
-    public float jump = 10f;
+    public int currentSpeed = 0;
+    public int currentJump = 0;
+
+    public int defaultSpeed = 0;
+    public int defaultJump = 0;
+    public int addSpeed = 0;
+    public int addJump = 0;
+    public int dashSpeed = 0;
+
     public float rotationSpeed = 180f;
 
     public bool isDash = false;
@@ -31,12 +38,23 @@ public class Player : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody2D>();
         audioSource.volume = SoundManager.Instance.GetSFXVolume();
+        Reset();
     }
 
     public void Reset()
     {
-        speed = 4f;
-        jump = 10f;
+        int characterNumber = PlayerData.Instance.characterNumber;
+
+        var data = ResourceManager.Instance.GetFriendlyDataByLevel(characterNumber);
+        defaultSpeed = data.speed;
+        defaultJump = data.jump;
+
+        currentSpeed = defaultSpeed;
+        currentJump = defaultJump;
+        addSpeed = data.addSpeed;
+        addJump = data.addJump;
+        dashSpeed = data.dashSpeed;
+
         rotationSpeed = 180f;
         isDash = false;
         isJumping = false;
@@ -49,11 +67,11 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        rigid.velocity = new Vector2(speed, rigid.velocity.y);
+        rigid.velocity = new Vector2(currentSpeed, rigid.velocity.y);
 
         if (isDash && !isSpeedUp)
         {
-            speed = 6f;
+            currentSpeed = dashSpeed;
             isSpeedUp = true; //
             isDash = false;
             Invoke("SpeedDown", 1f);
@@ -74,7 +92,7 @@ public class Player : MonoBehaviour
 
         if (isMouseDown && !isJumping && !isRotating)
         {
-            rigid.velocity = new Vector2(rigid.velocity.x, jump);
+            rigid.velocity = new Vector2(rigid.velocity.x, currentJump);
             isJumping = true;
             PlaySound("JUMP");
         }
@@ -157,13 +175,13 @@ public class Player : MonoBehaviour
             if (itemObject is JumpUpObject)
             {
                 // 점프력 업
-                jump = 15f;
+                currentJump = defaultJump + addJump;
                 Invoke("JumpDown", 2f);
             }
             else if (itemObject is SpeedUpObject)
             {
                 // 스피드 업
-                speed = 8f;
+                currentSpeed = defaultSpeed + addSpeed;
                 isSpeedUp = true;
                 Invoke("SpeedDown", 2f);
             }
@@ -179,12 +197,12 @@ public class Player : MonoBehaviour
 
     void JumpDown()
     {
-        jump = 10f;
+        currentJump = defaultJump;
     }
 
     void SpeedDown()
     {
-        speed = 4f;
+        currentSpeed = defaultSpeed;
         isSpeedUp = false;
     }
 
